@@ -15,7 +15,6 @@ end
 def consolidate_cart(cart)
   items_in_cart = []
   cart_index = 0
-
   while cart_index < cart.size do
     current_item = find_item_by_name_in_collection(cart[cart_index][:item], items_in_cart)
     if current_item == nil
@@ -36,7 +35,6 @@ end
 
 def apply_coupons(cart, coupons)
   cart_index = 0
-
   while cart_index < coupons.length do
     cart_item = find_item_by_name_in_collection(coupons[cart_index][:item], cart)
     coupon_item = "#{coupons[cart_index][:item]} W/COUPON"
@@ -59,29 +57,9 @@ def apply_coupons(cart, coupons)
   end
   cart
 end
-#---------------- apply_coupons FROM YOUTUBE TUTORIAL ----------------#
-# def apply_coupons(cart, coupons)
-#   coupons.each do |coupon|
-#     item = coupon[:item]
-#     if cart[item]
-#       if cart[item][:count] >= coupon[:num] && !cart.has_key?("#{item} W/COUPON")
-#         cart["#{item} W/COUPON"] = {price: coupon[:cost] / coupon[:num], clearance: cart[item][:clearance], count:coupon[:num]}
-#       elsif cart[item][:count] >= coupon[:num] && cart.has_key("#{item} W/COUPON")
-#         cart["#{item} W/COUPON"][:count] += coupon[:num]
-#       end
-#       cart[item][:count] -= coupon[:num]
-#     end
-#   end
-#   cart
-# end
 
 def apply_clearance(cart)
-  # Consult README for inputs and outputs
-  # Discount = 20%
-  # REMEMBER: This method **should** update cart
-
   cart_index = 0
-
   while cart_index < cart.length do
     if cart[cart_index][:clearance]
       cart[cart_index][:price] = (0.8 * cart[cart_index][:price]).round(3)
@@ -92,16 +70,13 @@ def apply_clearance(cart)
 end
 
 def checkout(cart, coupons)
-
   cart = apply_clearance(apply_coupons(consolidate_cart(cart), coupons))
-
   cart_index = 0
-  # total = 0
+  total = 0
   while cart_index < cart.length do
     total += (cart[cart_index][:price] * cart[cart_index][:count])
     cart_index += 1
   end
-
   if total > 100
     total = (0.9 * total).round(3)
   end
